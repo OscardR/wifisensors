@@ -50,7 +50,6 @@ public class ItemDetailFragment extends Fragment {
                              Bundle savedInstanceState) {
         Log.d("wifisensors", mItem.content + " layout " + mItem.layout);
         View rootView = inflater.inflate(mItem.layout, container, false);
-
         return rootView;
     }
 }

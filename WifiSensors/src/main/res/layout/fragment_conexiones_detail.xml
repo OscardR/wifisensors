@@ -5,6 +5,18 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <ToggleButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Wifi"
+        android:id="@+id/toggleWifi"
+        android:layout_gravity="center_horizontal"
+        android:clickable="true"
+        android:onClick="onClickToggleWifi"
+        android:textOff="OFF"
+        android:textOn="ON"
+        android:checked="false" />
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -12,4 +24,5 @@
         android:text="Fragmento Conexiones"
         android:id="@+id/txtBanner"
         android:layout_gravity="center_horizontal" />
+
 </LinearLayout>

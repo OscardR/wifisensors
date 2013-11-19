@@ -8,6 +8,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.NavUtils;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
 
 /**
  * An activity representing a single Item detail screen. This
@@ -20,6 +21,12 @@ import android.view.MenuItem;
  */
 public class ItemDetailActivity extends FragmentActivity {
 
+    // TODO: Unificar Fragments
+    ConexionesFragment conexionesFragment;
+    ItemDetailFragment itemDetailFragment;
+//    SensoresFragment sensoresFragment;
+//    InformacionFragment informacionFragment;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,9 +35,8 @@ public class ItemDetailActivity extends FragmentActivity {
         // Show the Up button in the action bar.
         try {
             getActionBar().setDisplayHomeAsUpEnabled(true);
-
         } catch (NullPointerException e) {
-            Log.d("wifisensors", "Te quedas sin ActionBar");
+            Log.d("wifisensors", "No hay ActionBar");
         }
 
         // savedInstanceState is non-null when there is fragment state
@@ -56,10 +62,12 @@ public class ItemDetailActivity extends FragmentActivity {
             if (mItem != null) {
                 Object fragment;
                 if (mItem.clss.equals("ItemDetailFragment")) {
-                    fragment = new ItemDetailFragment();
+                    itemDetailFragment = new ItemDetailFragment();
+                    fragment = itemDetailFragment;
                 } else {
                     Context ctx = getApplicationContext();
-                    fragment = new ConexionesDetailFragment(ctx);
+                    conexionesFragment = new ConexionesFragment(ctx);
+                    fragment = conexionesFragment;
                 }
                 ((Fragment) fragment).setArguments(arguments);
                 getSupportFragmentManager().beginTransaction()
@@ -86,5 +94,9 @@ public class ItemDetailActivity extends FragmentActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public void onClickToggleWifi(View view) {
+        conexionesFragment.onClickToggleWifi(view);
     }
 }

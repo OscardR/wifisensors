@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 /**
  * A fragment representing a single Item detail screen.
@@ -17,10 +18,12 @@ import android.widget.TextView;
  * in two-pane mode (on tablets) or a {@link com.oscargomez.wifisensors.ItemDetailActivity}
  * on handsets.
  */
-public class ConexionesDetailFragment extends Fragment {
+public class ConexionesFragment extends Fragment {
 
     Context context;
     private boolean isWifi;
+    private ToggleButton toggleWifi;
+    private TextView txtBanner;
 
     /**
      * The fragment argument representing the item ID that this fragment
@@ -37,10 +40,10 @@ public class ConexionesDetailFragment extends Fragment {
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
-    public ConexionesDetailFragment() {
+    public ConexionesFragment() {
     }
 
-    public ConexionesDetailFragment(Context ctx) {
+    public ConexionesFragment(Context ctx) {
         context = ctx;
     }
 
@@ -56,8 +59,29 @@ public class ConexionesDetailFragment extends Fragment {
         }
 
         Log.d("wifisensors", "context: " + context);
+    }
 
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+
+        View rootView = inflater.inflate(R.layout.fragment_conexiones_detail, container, false);
+
+        txtBanner = (TextView) rootView.findViewById(R.id.txtBanner);
+        txtBanner.setText(isWifi ? "Wifi ON" : "WifiOff");
+
+        toggleWifi = (ToggleButton) rootView.findViewById(R.id.toggleWifi);
+
+        return rootView;
+    }
+
+    public void onClickToggleWifi(View view) {
+        // Siempre que tengamos contexto
         if (context != null) {
+
+            Log.d("wifisensors", isWifi ? "Wifi ON" : "WifiOff");
+
             // La lógica de negocio del wifi
             ConnectivityManager connectivity = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
 
@@ -65,22 +89,11 @@ public class ConexionesDetailFragment extends Fragment {
             boolean isConnected = ((activeNetwork != null) &&
                     activeNetwork.isConnectedOrConnecting());
             isWifi = (activeNetwork.getType() == ConnectivityManager.TYPE_WIFI);
+            toggleWifi.setChecked(isWifi);
+
+            Log.d("wifisensors", "Wifi is: " + isWifi);
         } else {
             Log.d("wifisensors", "No hay contexto!!!!");
         }
-    }
-
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        Log.d("wifisensors", isWifi ? "Wifi ON" : "WifiOff");
-        View rootView = inflater.inflate(R.layout.fragment_conexiones_detail, container, false);
-
-        TextView txtBanner = (TextView) rootView.findViewById(R.id.txtBanner);
-        txtBanner.setText(isWifi ? "Wifi ON" : "WifiOff");
-        Log.d("wifisensors", "Wifi is: " + isWifi);
-
-        return rootView;
     }
 }
