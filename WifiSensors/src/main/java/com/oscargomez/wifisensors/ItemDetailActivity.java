@@ -21,11 +21,7 @@ import android.view.View;
  */
 public class ItemDetailActivity extends FragmentActivity {
 
-    // TODO: Unificar Fragments
-    ConexionesFragment conexionesFragment;
-    ItemDetailFragment itemDetailFragment;
-//    SensoresFragment sensoresFragment;
-//    InformacionFragment informacionFragment;
+    Fragment fragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,18 +56,16 @@ public class ItemDetailActivity extends FragmentActivity {
             Log.d("wifisensors", "item_id: " + getIntent().getStringExtra(ItemDetailFragment.ARG_ITEM_ID));
             MenuContent.MenuItem mItem = MenuContent.ITEM_MAP.get(getIntent().getStringExtra(ItemDetailFragment.ARG_ITEM_ID));
             if (mItem != null) {
-                Object fragment;
+                //Object fragment;
                 if (mItem.clss.equals("ItemDetailFragment")) {
-                    itemDetailFragment = new ItemDetailFragment();
-                    fragment = itemDetailFragment;
+                    fragment = new ItemDetailFragment();
                 } else {
                     Context ctx = getApplicationContext();
-                    conexionesFragment = new ConexionesFragment(ctx);
-                    fragment = conexionesFragment;
+                    fragment = new ConexionesFragment(ctx);
                 }
-                ((Fragment) fragment).setArguments(arguments);
+                fragment.setArguments(arguments);
                 getSupportFragmentManager().beginTransaction()
-                        .add(R.id.item_detail_container, (Fragment) fragment)
+                        .add(R.id.item_detail_container, fragment)
                         .commit();
             } else {
                 Log.d("wifisensor", "No hay mItem!!!");
@@ -97,6 +91,6 @@ public class ItemDetailActivity extends FragmentActivity {
     }
 
     public void onClickToggleWifi(View view) {
-        conexionesFragment.onClickToggleWifi(view);
+        ((ConexionesFragment) fragment).onClickToggleWifi(view);
     }
 }
