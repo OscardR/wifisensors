@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="20dip"
+    android:id="@+id/layoutSensores">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="@string/txt_temperatura"
+        android:id="@+id/txtTemperaturaTitle"
+        android:textIsSelectable="false"
+        android:editable="false" />
+
+    <ProgressBar
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/barTemperatura"
+        android:max="12"
+        android:progress="6" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="36º"
+        android:id="@+id/txtTemperatura"
+        android:layout_gravity="right"
+        android:textIsSelectable="false"
+        android:editable="false" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="@string/txt_calma"
+        android:id="@+id/txtCalmaTitle"
+        android:textIsSelectable="false"
+        android:editable="false" />
+
+    <ProgressBar
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/barCalma"
+        android:max="180"
+        android:progress="60" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="60ppm"
+        android:id="@+id/txtCalma"
+        android:layout_gravity="right"
+        android:textIsSelectable="false"
+        android:editable="false" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="@string/txt_tiempo"
+        android:id="@+id/txtTiempoTitle"
+        android:textIsSelectable="false"
+        android:editable="false" />
+
+    <ProgressBar
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/barTiempo"
+        android:max="24"
+        android:progress="0" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Mon Jan 1 00:00:00"
+        android:id="@+id/txtTiempo"
+        android:layout_gravity="right"
+        android:textIsSelectable="false"
+        android:editable="false" />
+</LinearLayout>

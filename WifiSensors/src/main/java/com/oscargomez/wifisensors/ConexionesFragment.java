@@ -8,13 +8,15 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.ToggleButton;
 
 /**
@@ -23,29 +25,25 @@ import android.widget.ToggleButton;
  * in two-pane mode (on tablets) or a {@link com.oscargomez.wifisensors.ItemDetailActivity}
  * on handsets.
  */
-public class ConexionesFragment extends Fragment {
+public class ConexionesFragment extends ItemDetailFragment implements OnClickListener, OnCheckedChangeListener {
 
-    Context context;
     private boolean isWifi;
     private boolean isConnected;
+
+    /**
+     * UI
+     */
     private ToggleButton btnToggleWifi;
     private TextView txtBanner;
+    private RelativeLayout layLista;
 
+    /**
+     * Conectividad
+     */
     ConnectivityManager connectivity;
     NetworkInfo activeNetwork;
     WifiManager wifiManager;
     WifiMonitor wifiMonitor;
-
-    /**
-     * The fragment argument representing the item ID that this fragment
-     * represents.
-     */
-    public static final String ARG_ITEM_ID = "item_id";
-
-    /**
-     * The content this fragment is presenting.
-     */
-    private MenuContent.MenuItem mItem;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -62,19 +60,12 @@ public class ConexionesFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (getArguments().containsKey(ARG_ITEM_ID)) {
-            // Load the content specified by the fragment
-            // arguments. In a real-world scenario, use a Loader
-            // to load content from a content provider.
-            mItem = MenuContent.ITEM_MAP.get(getArguments().getString(ARG_ITEM_ID));
-        }
-
+        // Managers varios
         connectivity = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
         wifiMonitor = new WifiMonitor();
-        getActivity().registerReceiver(wifiMonitor, new IntentFilter(WifiManager.WIFI_STATE_CHANGED_ACTION));
 
-        Log.d("wifisensors", "context: " + context);
+        getActivity().registerReceiver(wifiMonitor, new IntentFilter(WifiManager.WIFI_STATE_CHANGED_ACTION));
     }
 
 
@@ -82,58 +73,83 @@ public class ConexionesFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View rootView = inflater.inflate(R.layout.fragment_conexiones_detail, container, false);
+        View rootView = super.onCreateView(inflater, container,
+                savedInstanceState);
 
-        txtBanner = (TextView) rootView.findViewById(R.id.txtBanner);
-        txtBanner.setText(isWifi ? "Wifi ON" : "Wifi Off");
-
+        layLista = (RelativeLayout) rootView.findViewById(R.id.layLista);
         btnToggleWifi = (ToggleButton) rootView.findViewById(R.id.btnToggleWifi);
-        //updateView();
+        txtBanner = (TextView) rootView.findViewById(R.id.txtBanner);
 
         return rootView;
     }
 
-    public void onClickToggleWifi(View view) {
-        conectarWifi();
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
 
-        Log.d("wifisensors", "Wifi is: " + (isWifi ? "ON" : "OFF"));
+        // Setear este fragment como listener para el botón
+        btnToggleWifi.setOnCheckedChangeListener(this);
+        btnToggleWifi.setOnClickListener(this);
     }
 
-    private void conectarWifi() {
+    @Override
+    public void onClick(View v) {
+        Log.d("wifisensors", "onClick handler");
+        switch (v.getId()) {
+            case R.id.btnToggleWifi:
+                onClickToggleWifi();
+                break;
+            default:
+                Log.d("wifisensors", "sin handler");
+        }
+    }
+
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        makeToast("Botón " + (isChecked ? "ON" : "OFF"));
+    }
+
+    public void onClickToggleWifi() {
+        toggleWifi();
+    }
+
+    private void toggleWifi() {
         if (!wifiManager.isWifiEnabled()) {
             if (wifiManager.getWifiState() != WifiManager.WIFI_STATE_ENABLING) {
                 wifiManager.setWifiEnabled(true);
-                Log.v("wifisensors", "Activando wifi...");
+                makeToast("Activando wifi");
             }
         } else {
             if (wifiManager.getWifiState() != WifiManager.WIFI_STATE_DISABLING) {
                 wifiManager.setWifiEnabled(false);
-                Log.v("wifisensors", "Desactivando wifi...");
+                makeToast("Desactivando wifi...");
             }
         }
-    }
-
-    private void updateView() {
-        Log.d("wifisensors", "llamada a updateView()");
-        btnToggleWifi.setChecked(isWifi);
-        txtBanner.setText(isWifi ? "Wifi ON" : "Wifi Off");
     }
 
     public class WifiMonitor extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
-            // La lógica de negocio de las conexiones
-            activeNetwork = connectivity.getActiveNetworkInfo();
 
-            // Para saber si tenemos conexión, y si ésta es wifi
-            isConnected = ((activeNetwork != null) && activeNetwork.isConnectedOrConnecting());
-            if (isConnected) isWifi = (activeNetwork.getType() == ConnectivityManager.TYPE_WIFI);
+            if (intent.getAction().equals(WifiManager.WIFI_STATE_CHANGED_ACTION)) {
+                int state = intent.getIntExtra(WifiManager.EXTRA_WIFI_STATE, WifiManager.WIFI_STATE_DISABLED);
+                if (state == WifiManager.WIFI_STATE_ENABLED) {
 
-            Toast.makeText(context, "Red activa: " + ((wifiManager.getConfiguredNetworks() != null) ? wifiManager.getConfiguredNetworks().get(0).toString() : "ninguna"), Toast.LENGTH_LONG).show();
+                    // La lógica de negocio de las conexiones
+                    activeNetwork = connectivity.getActiveNetworkInfo();
 
-            Log.d("wifisensors", "activeNetwork: " + ((activeNetwork != null) ? activeNetwork.toString() : "null"));
+                    // Para saber si tenemos conexión, y si ésta es wifi
+                    isConnected = ((activeNetwork != null) && activeNetwork.isConnectedOrConnecting());
+                    if (isConnected)
+                        isWifi = (activeNetwork.getType() == ConnectivityManager.TYPE_WIFI);
 
-            updateView();
+                    Log.d("wifisensors", "activeNetwork: " + ((activeNetwork != null) ? activeNetwork.toString() : "null"));
+                }
+                makeToast("El wifi está " + (isWifi && isConnected ? "ON" : "OFF"));
+            }
+
+            makeToast("Red activa: " + ((wifiManager.getConfiguredNetworks() != null) ?
+                    wifiManager.getConfiguredNetworks().get(0).BSSID : "ninguna"), true);
         }
     }
 }

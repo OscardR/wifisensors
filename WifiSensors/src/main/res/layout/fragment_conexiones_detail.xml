@@ -19,12 +19,20 @@
         android:text="Wifi"
         android:id="@+id/btnToggleWifi"
         android:clickable="true"
-        android:onClick="onClickToggleWifi"
         android:textOff="OFF"
         android:textOn="ON"
         android:checked="false"
         android:layout_alignParentEnd="false"
         android:layout_alignParentRight="true" />
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_above="@+id/txtBanner"
+        android:layout_alignParentLeft="true"
+        android:layout_marginBottom="98dp"
+        android:layout_below="@+id/btnToggleWifi"
+        android:id="@+id/layLista"></RelativeLayout>
 
     <TextView
         android:layout_width="wrap_content"
@@ -32,6 +40,7 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Fragmento Conexiones"
         android:id="@+id/txtBanner"
-        android:layout_below="@+id/btnToggleWifi"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true" />
+
 </RelativeLayout>

@@ -24,6 +24,8 @@ import android.support.v4.app.FragmentActivity;
 public class ItemListActivity extends FragmentActivity
         implements ItemListFragment.Callbacks {
 
+    private ItemDetailFragment fragment;
+
     /**
      * Whether or not the activity is in two-pane mode, i.e. running on a tablet
      * device.
@@ -65,7 +67,7 @@ public class ItemListActivity extends FragmentActivity
             Bundle arguments = new Bundle();
             arguments.putString(ItemDetailFragment.ARG_ITEM_ID, id);
 
-            ItemDetailFragment fragment = new ItemDetailFragment();
+            fragment = new ItemDetailFragment();
             fragment.setArguments(arguments);
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.item_detail_container, fragment)

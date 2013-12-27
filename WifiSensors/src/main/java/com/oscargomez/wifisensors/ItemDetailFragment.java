@@ -1,11 +1,13 @@
 package com.oscargomez.wifisensors;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 /**
  * A fragment representing a single Item detail screen.
@@ -19,17 +21,22 @@ public class ItemDetailFragment extends Fragment {
      * represents.
      */
     public static final String ARG_ITEM_ID = "item_id";
+    protected Context context;
 
     /**
      * The dummy content this fragment is presenting.
      */
-    private MenuContent.MenuItem mItem;
+    protected MenuContent.MenuItem mItem;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
     public ItemDetailFragment() {
+    }
+
+    public ItemDetailFragment(Context ctx) {
+        context = ctx;
     }
 
     @Override
@@ -48,8 +55,16 @@ public class ItemDetailFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        Log.d("wifisensors", mItem.content + " layout " + mItem.layout);
         View rootView = inflater.inflate(mItem.layout, container, false);
         return rootView;
+    }
+
+    protected void makeToast(String msg, boolean lng) {
+        Log.d("wifisensors", msg);
+        Toast.makeText(context, msg, lng ? Toast.LENGTH_LONG : Toast.LENGTH_SHORT).show();
+    }
+
+    protected void makeToast(String msg) {
+        makeToast(msg, false);
     }
 }
