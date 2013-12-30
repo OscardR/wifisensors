@@ -25,12 +25,11 @@
         android:layout_alignParentEnd="false"
         android:layout_alignParentRight="true" />
 
-    <RelativeLayout
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_alignParentLeft="true"
-        android:layout_marginBottom="98dp"
+    <ListView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/listNetworks"
         android:layout_below="@+id/btnToggleWifi"
-        android:id="@+id/layLista"></RelativeLayout>
+        android:layout_centerHorizontal="true" />
 
 </RelativeLayout>

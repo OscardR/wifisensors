@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,8 +16,11 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
-import android.widget.RelativeLayout;
+import android.widget.ListView;
 import android.widget.ToggleButton;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A fragment representing a single Item detail screen.
@@ -33,7 +37,8 @@ public class ConexionesFragment extends ItemDetailFragment implements OnClickLis
      * UI
      */
     private ToggleButton btnToggleWifi;
-    private RelativeLayout layLista;
+    private ListView listNetworks;
+    List<WifiConfiguration> networksList = new ArrayList<WifiConfiguration>();
     //private TextView txtBanner;
 
     /**
@@ -67,9 +72,11 @@ public class ConexionesFragment extends ItemDetailFragment implements OnClickLis
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = super.onCreateView(inflater, container, savedInstanceState);
-        layLista = (RelativeLayout) rootView.findViewById(R.id.layLista);
         btnToggleWifi = (ToggleButton) rootView.findViewById(R.id.btnToggleWifi);
         btnToggleWifi.setChecked(wifiManager.isWifiEnabled());
+        listNetworks = (ListView) rootView.findViewById(R.id.listNetworks);
+        WifiListAdapter adapter = new WifiListAdapter(context, networksList);
+        listNetworks.setAdapter(adapter);
         return rootView;
     }
 
@@ -134,13 +141,18 @@ public class ConexionesFragment extends ItemDetailFragment implements OnClickLis
                     if (isConnected)
                         isWifi = (activeNetwork.getType() == ConnectivityManager.TYPE_WIFI);
 
-                    makeToast("Active Network: " + ((activeNetwork != null) ? activeNetwork.getTypeName() : "null"));
+                    if (isWifi) {
+                        networksList = wifiManager.getConfiguredNetworks();
+                        for (WifiConfiguration network : networksList) {
+                            Log.i("wifisensors", "Network: " + network.SSID);
+                        }
+                    }
                 }
                 makeToast("El wifi está " + (isWifi && isConnected ? "ON" : "OFF"));
             }
 
             makeToast("Red activa: " + ((wifiManager.getConfiguredNetworks() != null) ?
-                    wifiManager.getConfiguredNetworks().get(0).BSSID : "ninguna"), true);
+                    wifiManager.getConfiguredNetworks().get(0).SSID : "ninguna"), true);
         }
     }
 }
