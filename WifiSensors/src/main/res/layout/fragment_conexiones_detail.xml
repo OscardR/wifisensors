@@ -28,19 +28,9 @@
     <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_above="@+id/txtBanner"
         android:layout_alignParentLeft="true"
         android:layout_marginBottom="98dp"
         android:layout_below="@+id/btnToggleWifi"
         android:id="@+id/layLista"></RelativeLayout>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Fragmento Conexiones"
-        android:id="@+id/txtBanner"
-        android:layout_centerHorizontal="true"
-        android:layout_alignParentBottom="true" />
 
 </RelativeLayout>

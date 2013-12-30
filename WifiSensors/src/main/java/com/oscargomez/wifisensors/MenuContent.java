@@ -27,7 +27,7 @@ public class MenuContent {
         // Add 3 sample items.
         addItem(new MenuItem("1", "Conexiones", "ConexionesFragment", R.layout.fragment_conexiones_detail));
         addItem(new MenuItem("2", "Sensores", "SensoresFragment", R.layout.fragment_sensores_detail));
-        addItem(new MenuItem("3", "Información", "ItemDetailFragment", R.layout.fragment_item_detail));
+        addItem(new MenuItem("3", "Información", "InformacionFragment", R.layout.fragment_informacion_detail));
     }
 
     private static void addItem(MenuItem item) {

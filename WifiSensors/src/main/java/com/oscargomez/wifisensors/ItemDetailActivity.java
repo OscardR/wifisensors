@@ -54,9 +54,11 @@ public class ItemDetailActivity extends FragmentActivity {
                 Context ctx = getApplicationContext();
 
                 if (mItem.clss.equals("SensoresFragment")) {
-                    fragment = new SensoresFragment(ctx);
+                    fragment = new SensoresFragment();
                 } else if (mItem.clss.equals("ConexionesFragment")) {
-                    fragment = new ConexionesFragment(ctx);
+                    fragment = new ConexionesFragment();
+                } else if (mItem.clss.equals("InformacionFragment")) {
+                    fragment = new InformacionFragment();
                 } else { // ItemDetailFragment: default dummy fragment
                     fragment = new ItemDetailFragment();
                 }
@@ -82,13 +84,4 @@ public class ItemDetailActivity extends FragmentActivity {
         }
         return super.onOptionsItemSelected(item);
     }
-
-    /**
-     * Callback para el fragment
-     * @param view
-     */
-//    public void onClickToggleWifi(View view) {
-//        Log.d("wifisensors", "ItemDetailActivity.onClickToggleWifi");
-//        ((ConexionesFragment) fragment).onClickToggleWifi(view);
-//    }
 }

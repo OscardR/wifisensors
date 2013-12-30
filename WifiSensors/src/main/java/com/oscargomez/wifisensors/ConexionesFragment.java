@@ -16,7 +16,6 @@ import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.ToggleButton;
 
 /**
@@ -34,8 +33,8 @@ public class ConexionesFragment extends ItemDetailFragment implements OnClickLis
      * UI
      */
     private ToggleButton btnToggleWifi;
-    private TextView txtBanner;
     private RelativeLayout layLista;
+    //private TextView txtBanner;
 
     /**
      * Conectividad
@@ -52,10 +51,6 @@ public class ConexionesFragment extends ItemDetailFragment implements OnClickLis
     public ConexionesFragment() {
     }
 
-    public ConexionesFragment(Context ctx) {
-        context = ctx;
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,21 +60,16 @@ public class ConexionesFragment extends ItemDetailFragment implements OnClickLis
         wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
         wifiMonitor = new WifiMonitor();
 
-        getActivity().registerReceiver(wifiMonitor, new IntentFilter(WifiManager.WIFI_STATE_CHANGED_ACTION));
+        context.registerReceiver(wifiMonitor, new IntentFilter(WifiManager.WIFI_STATE_CHANGED_ACTION));
     }
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-
-        View rootView = super.onCreateView(inflater, container,
-                savedInstanceState);
-
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View rootView = super.onCreateView(inflater, container, savedInstanceState);
         layLista = (RelativeLayout) rootView.findViewById(R.id.layLista);
         btnToggleWifi = (ToggleButton) rootView.findViewById(R.id.btnToggleWifi);
-        txtBanner = (TextView) rootView.findViewById(R.id.txtBanner);
-
+        btnToggleWifi.setChecked(wifiManager.isWifiEnabled());
         return rootView;
     }
 
@@ -105,15 +95,17 @@ public class ConexionesFragment extends ItemDetailFragment implements OnClickLis
     }
 
     @Override
+    public void onDetach() {
+        super.onDetach();
+        context.unregisterReceiver(wifiMonitor);
+    }
+
+    @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         makeToast("Botón " + (isChecked ? "ON" : "OFF"));
     }
 
-    public void onClickToggleWifi() {
-        toggleWifi();
-    }
-
-    private void toggleWifi() {
+    private void onClickToggleWifi() {
         if (!wifiManager.isWifiEnabled()) {
             if (wifiManager.getWifiState() != WifiManager.WIFI_STATE_ENABLING) {
                 wifiManager.setWifiEnabled(true);
@@ -130,7 +122,6 @@ public class ConexionesFragment extends ItemDetailFragment implements OnClickLis
     public class WifiMonitor extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
-
             if (intent.getAction().equals(WifiManager.WIFI_STATE_CHANGED_ACTION)) {
                 int state = intent.getIntExtra(WifiManager.EXTRA_WIFI_STATE, WifiManager.WIFI_STATE_DISABLED);
                 if (state == WifiManager.WIFI_STATE_ENABLED) {
@@ -143,7 +134,7 @@ public class ConexionesFragment extends ItemDetailFragment implements OnClickLis
                     if (isConnected)
                         isWifi = (activeNetwork.getType() == ConnectivityManager.TYPE_WIFI);
 
-                    Log.d("wifisensors", "activeNetwork: " + ((activeNetwork != null) ? activeNetwork.toString() : "null"));
+                    makeToast("Active Network: " + ((activeNetwork != null) ? activeNetwork.getTypeName() : "null"));
                 }
                 makeToast("El wifi está " + (isWifi && isConnected ? "ON" : "OFF"));
             }

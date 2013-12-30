@@ -1,5 +1,6 @@
 package com.oscargomez.wifisensors;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -35,8 +36,11 @@ public class ItemDetailFragment extends Fragment {
     public ItemDetailFragment() {
     }
 
-    public ItemDetailFragment(Context ctx) {
-        context = ctx;
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        context = activity;
+        Log.i("wifisensors", "ItemDetailFragment.onAttach");
     }
 
     @Override
@@ -60,7 +64,7 @@ public class ItemDetailFragment extends Fragment {
     }
 
     protected void makeToast(String msg, boolean lng) {
-        Log.d("wifisensors", msg);
+        Log.i("wifisensors", msg);
         Toast.makeText(context, msg, lng ? Toast.LENGTH_LONG : Toast.LENGTH_SHORT).show();
     }
 
